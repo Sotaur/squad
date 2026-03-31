@@ -2,7 +2,9 @@
 
 > ⚠️ **Experimental** — Squad is alpha software. APIs, commands, and behavior may change between releases.
 
-This guide covers connecting to the Copilot SDK via Squad's adapter layer, managing sessions, handling events, and recovering from errors.
+This guide covers connecting to host runtimes via Squad's adapter layer, managing sessions, handling events, and recovering from errors.
+
+For end-user host migration guidance, see [Agent Platforms](../features/agent-platforms.md). For adapter-level API details, see [Host Adapters Reference](./host-adapters.md).
 
 ---
 

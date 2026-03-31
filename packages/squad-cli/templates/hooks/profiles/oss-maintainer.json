@@ -1,0 +1,21 @@
+{
+  "name": "oss-maintainer",
+  "description": "Balanced governance profile for public OSS repositories.",
+  "hooks": {
+    "allowedWritePaths": [
+      "src/**",
+      "test/**",
+      "docs/**",
+      "scripts/**",
+      "*.md",
+      "*.json"
+    ],
+    "blockedCommands": [
+      "rm -rf",
+      "git push --force"
+    ],
+    "maxAskUserPerSession": 5,
+    "scrubPii": true,
+    "reviewerLockout": true
+  }
+}

@@ -38,6 +38,45 @@ export interface StartOptions {
   command?: string;
 }
 
+type NodePtyModule = {
+  spawn: (
+    file: string,
+    args: string[],
+    options: {
+      name: string;
+      cols: number;
+      rows: number;
+      cwd: string;
+      env: Record<string, string>;
+    }
+  ) => {
+    onData: (cb: (data: string) => void) => void;
+    onExit: (cb: ({ exitCode }: { exitCode: number }) => void) => void;
+    write: (data: string) => void;
+    resize: (cols: number, rows: number) => void;
+    kill: () => void;
+  };
+};
+
+type NodePtyImporter = (specifier: string) => Promise<unknown>;
+
+/**
+ * Load node-pty lazily for tunnel/start flows.
+ * Throws a clear actionable message when the native module is unavailable.
+ */
+export async function loadNodePtyForStart(importer: NodePtyImporter = (specifier) => import(specifier)): Promise<NodePtyModule> {
+  return importer('node-pty').then(
+    (mod) => mod as NodePtyModule,
+    (err) => {
+      const message = err instanceof Error ? err.message : String(err);
+      throw new Error(
+        `The 'start' command requires optional dependency 'node-pty', but it could not be loaded (${message}). ` +
+        "Install it in the CLI environment (for example: 'npm i -g node-pty') and retry."
+      );
+    }
+  );
+}
+
 export async function runStart(cwd: string, options: StartOptions): Promise<void> {
   const { repo, branch } = getGitInfo(cwd);
   const machine = getMachineId();
@@ -121,8 +160,7 @@ export async function runStart(cwd: string, options: StartOptions): Promise<void
 
   // ─── Spawn copilot in PTY ─────────────────────────────────
   // Dynamic import node-pty (native module)
-  // @ts-expect-error — node-pty is an optional native dependency
-  const nodePty = await import('node-pty');
+  const nodePty = await loadNodePtyForStart();
 
   const copilotExePath = path.join(
     'C:', 'ProgramData', 'global-npm', 'node_modules', '@github', 'copilot',

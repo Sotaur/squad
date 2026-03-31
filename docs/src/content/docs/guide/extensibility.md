@@ -122,6 +122,7 @@ Ready to build? See [Building extensions](./building-extensions.md) for a five-m
 - [Skills](../features/skills.md) — How to write skills for your team or plugins
 - [Ceremonies](../features/ceremonies.md) — How to define team meetings and gates
 - [Routing](../features/routing.md) — How to configure work assignment rules
+- [Agent Platforms](../features/agent-platforms.md) — How Squad behavior moves across Copilot, Codex, Claude, and generic MCP hosts
 - [Building extensions](./building-extensions.md) — Step-by-step guide to building and sharing extensions
 - [Contributing](https://github.com/bradygaster/squad/blob/main/CONTRIBUTING.md) — How to propose changes to Squad core
 

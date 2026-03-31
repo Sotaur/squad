@@ -1,0 +1,21 @@
+{
+  "name": "strict-enterprise",
+  "description": "Maximum governance guardrails for regulated environments.",
+  "hooks": {
+    "allowedWritePaths": [
+      "src/**",
+      "test/**",
+      "docs/**",
+      "*.md"
+    ],
+    "blockedCommands": [
+      "rm -rf",
+      "git push --force",
+      "git reset --hard",
+      "chmod 777"
+    ],
+    "maxAskUserPerSession": 2,
+    "scrubPii": true,
+    "reviewerLockout": true
+  }
+}
