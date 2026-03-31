@@ -13,7 +13,7 @@
     "sync-templates": "node scripts/sync-templates.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "tsc --noEmit -p packages/squad-sdk/tsconfig.json && tsc --noEmit -p packages/squad-cli/tsconfig.json",
+    "lint": "tsc -b --pretty false",
     "lint:eslint": "eslint packages/ test/",
     "lint:docs": "markdownlint-cli2 && cspell --no-progress --dot \"docs/src/content/**/*.md\" \"README.md\"",
     "dev:link": "npm run build && cd packages/squad-sdk && npm link && cd ../squad-cli && npm link",
