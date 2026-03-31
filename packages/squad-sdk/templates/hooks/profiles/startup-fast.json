@@ -1,0 +1,16 @@
+{
+  "name": "startup-fast",
+  "description": "Lightweight guardrails optimized for speed in early-stage teams.",
+  "hooks": {
+    "allowedWritePaths": [
+      "**"
+    ],
+    "blockedCommands": [
+      "rm -rf",
+      "git reset --hard"
+    ],
+    "maxAskUserPerSession": 8,
+    "scrubPii": false,
+    "reviewerLockout": false
+  }
+}

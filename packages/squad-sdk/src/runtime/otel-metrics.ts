@@ -263,6 +263,49 @@ interface ReworkMetrics {
   timeHistogram: ReturnType<ReturnType<typeof getMeter>['createHistogram']>;
 }
 
+// ============================================================================
+// Host Capability / Degraded Mode Metrics
+// ============================================================================
+
+interface CapabilityProfileMetrics {
+  degradedCounter: ReturnType<ReturnType<typeof getMeter>['createCounter']>;
+  fallbackCounter: ReturnType<ReturnType<typeof getMeter>['createCounter']>;
+}
+
+let _capabilityProfileMetrics: CapabilityProfileMetrics | undefined;
+
+function ensureCapabilityProfileMetrics(): CapabilityProfileMetrics {
+  if (!_capabilityProfileMetrics) {
+    const meter = getMeter('squad-sdk');
+    _capabilityProfileMetrics = {
+      degradedCounter: meter.createCounter('squad.runtime.degraded_profiles', {
+        description: 'Total degraded runtime profile resolutions',
+      }),
+      fallbackCounter: meter.createCounter('squad.runtime.fallback_strategy_applied', {
+        description: 'Fallback strategies selected by capability negotiation',
+      }),
+    };
+  }
+  return _capabilityProfileMetrics;
+}
+
+export function recordRuntimeProfileMode(
+  mode: 'native' | 'degraded',
+  host: string,
+): void {
+  if (mode !== 'degraded') return;
+  const m = ensureCapabilityProfileMetrics();
+  m.degradedCounter.add(1, { host, mode });
+}
+
+export function recordFallbackStrategy(
+  host: string,
+  capability: string,
+): void {
+  const m = ensureCapabilityProfileMetrics();
+  m.fallbackCounter.add(1, { host, capability });
+}
+
 let _reworkMetrics: ReworkMetrics | undefined;
 
 function ensureReworkMetrics(): ReworkMetrics {
@@ -330,5 +373,6 @@ export function _resetMetrics(): void {
   _agentMetrics = undefined;
   _sessionPoolMetrics = undefined;
   _latencyMetrics = undefined;
+  _capabilityProfileMetrics = undefined;
   _reworkMetrics = undefined;
 }

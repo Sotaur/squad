@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Portable MCP bundle for Squad host adapters",
+  "requiredServers": [
+    {
+      "name": "github",
+      "capabilities": ["issues", "pull-requests", "commits"],
+      "requiredEnv": ["GITHUB_TOKEN"]
+    }
+  ],
+  "optionalServers": [
+    {
+      "name": "docs",
+      "capabilities": ["docs-search"],
+      "requiredEnv": []
+    },
+    {
+      "name": "deploy",
+      "capabilities": ["deployments", "runtime-health"],
+      "requiredEnv": []
+    }
+  ]
+}

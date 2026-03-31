@@ -101,7 +101,9 @@ export type {
 // Base Roles (built-in role catalog)
 export * from './roles/index.js';
 export * from './platform/index.js';
+export * from './host/index.js';
 export * from './storage/index.js';
+export * from './runtime/capability-profile.js';
 
 // State facade (Phase 2) — namespaced to avoid conflicts with existing config/sharing exports
 export {

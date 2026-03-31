@@ -46,4 +46,10 @@ describe('SDK package exports', () => {
     const tools = await import('@bradygaster/squad-sdk/tools');
     expect(tools).toBeDefined();
   });
+
+  it('exports FSStorageProvider from root package', async () => {
+    const sdk = await import('@bradygaster/squad-sdk');
+    expect(sdk.FSStorageProvider).toBeDefined();
+    expect(typeof sdk.FSStorageProvider).toBe('function');
+  });
 });

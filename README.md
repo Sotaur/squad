@@ -19,6 +19,26 @@ It's not a chatbot wearing hats. Each team member runs in its own context, reads
 
 ---
 
+## Repository Lineage & Credits
+
+This repository builds on the original **Squad** project by Brady Gaster and contributors.
+
+- Original repository: https://github.com/bradygaster/squad
+- Original maintainers and contributors deserve full credit for the core architecture, product direction, and baseline implementation.
+
+### What changed in this fork
+
+Compared to the original baseline, this fork adds and expands:
+
+- A multi-host adapter layer (`copilot`, `codex`, `claude`, `generic-mcp`) with shared capability contracts.
+- Capability probing + resolution helpers, including probe-aware profile resolution and fail-closed native-hook policy paths.
+- Additional degraded-mode telemetry around runtime profile fallback behavior.
+- Portability artifacts and templates (MCP bundle, hook profiles, platform-compat skill).
+- Extra internal architecture/security review docs and phased remediation plans.
+- Additional docs for users and SDK developers about host-platform behavior and integration.
+
+---
+
 ## Quick Start
 
 ### 1. Create your project
