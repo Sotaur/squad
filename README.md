@@ -57,6 +57,12 @@ npm install -g @bradygaster/squad-cli
 squad init
 ```
 
+Or run without a global install:
+
+```bash
+npx @bradygaster/squad-cli init
+```
+
 **✓ Validate:** Check that `.squad/team.md` was created in your project.
 
 ### 3. Authenticate with GitHub (for Issues, PRs, and Ralph)
@@ -112,10 +118,13 @@ Use `--force` to re-apply updates even when your installed version already match
 
 ---
 
-## All Commands (15 commands)
+## Core Commands
+
+> 📘 The CLI evolves quickly. For the complete, always-current command matrix and flags, see [docs/src/content/docs/reference/cli.md](docs/src/content/docs/reference/cli.md).
 
 | Command | What it does |
 |---------|-------------|
+| `squad` | Enter the interactive shell (default interface) |
 | `squad init` | **Init** — scaffold Squad in the current directory (idempotent — safe to run multiple times); alias: `hire`; use `--global` to init in personal squad directory, `--mode remote <path>` for dual-root mode |
 | `squad upgrade` | Update Squad-owned files to latest; never touches your team state; use `--global` to upgrade personal squad, `--migrate-directory` to rename `.ai-team/` → `.squad/` |
 | `squad status` | Show which squad is active and why |
@@ -123,7 +132,7 @@ Use `--force` to re-apply updates even when your installed version already match
 | `squad copilot` | Add/remove the Copilot coding agent (@copilot); use `--off` to remove, `--auto-assign` to enable auto-assignment |
 | `squad doctor` | Check your setup and diagnose issues (alias: `heartbeat`) |
 | `squad link <team-repo-path>` | Connect to a remote team |
-| `squad shell` | Launch interactive shell explicitly |
+| `squad start [--tunnel] [--port N] [--command cmd]` | Start Copilot with optional remote phone access (PTY + WebSocket/devtunnel) |
 | `squad export` | Export squad to a portable JSON snapshot |
 | `squad import <file>` | Import squad from an export file |
 | `squad plugin marketplace add\|remove\|list\|browse` | Manage plugin marketplaces |
@@ -278,20 +287,19 @@ Squad is a monorepo with two packages:
 - **`@bradygaster/squad-sdk`** — Core runtime and library for programmable agent orchestration
 - **`@bradygaster/squad-cli`** — Command-line interface that depends on the SDK
 
+These are workspace packages inside this repository (`packages/squad-sdk` and `packages/squad-cli`), not separate upstream repos you need to fork. Forking this repo is sufficient for normal development.
+
 ### Building
 
 ```bash
 # Install dependencies (npm workspaces)
 npm install
 
-# Build TypeScript to dist/
+# Build all workspace packages
 npm run build
 
-# Build CLI bundle (dist/ + esbuild → cli.js)
-npm run build:cli
-
-# Watch mode for development
-npm run dev
+# Sync templates only (optional, for template changes)
+npm run sync-templates
 ```
 
 ### Testing
