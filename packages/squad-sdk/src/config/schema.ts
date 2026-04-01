@@ -3,6 +3,26 @@
  * Typed configuration interface for Squad teams
  */
 
+export interface LlmApiConfig {
+  /** Backing LLM API/provider selected by the user. */
+  provider:
+    | 'copilot'
+    | 'anthropic'
+    | 'openai'
+    | 'azure-openai'
+    | 'google'
+    | 'generic-openai-compatible'
+    | 'generic-mcp';
+  /** Optional endpoint override for enterprise or gateway deployments. */
+  baseUrl?: string;
+  /** Optional env var name for provider credentials. */
+  apiKeyEnv?: string;
+  /** Optional model hint at provider level. */
+  model?: string;
+  /** Optional host adapter override when auto mapping is not desired. */
+  hostOverride?: 'copilot' | 'codex' | 'claude' | 'generic-mcp';
+}
+
 export interface SquadConfig {
   version: string;
   team: TeamConfig;
@@ -12,6 +32,7 @@ export interface SquadConfig {
   hooks?: HooksConfig;
   ceremonies?: CeremonyConfig[];
   plugins?: PluginConfig;
+  llmApi?: LlmApiConfig;
 }
 
 export interface TeamConfig {
@@ -117,6 +138,7 @@ export function defineConfig(config: Partial<SquadConfig>): SquadConfig {
       tiers: config.models?.tiers ?? DEFAULT_CONFIG.models.tiers,
     },
     agents: config.agents ?? DEFAULT_CONFIG.agents,
+    llmApi: config.llmApi,
   };
 }
 
@@ -130,6 +152,10 @@ export function validateConfig(config: unknown): config is SquadConfig {
   if (!c.routing || !Array.isArray(c.routing.rules)) return false;
   if (!c.models || typeof c.models.default !== 'string') return false;
   if (!Array.isArray(c.agents)) return false;
-  
+  if (c.llmApi) {
+    if (typeof c.llmApi !== 'object' || c.llmApi === null) return false;
+    if (typeof c.llmApi.provider !== 'string') return false;
+  }
+
   return true;
 }
