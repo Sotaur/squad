@@ -22,6 +22,14 @@ import {
 } from './codex-host-adapter.js';
 import { CopilotHostAdapter, type CopilotHostClientLike } from './copilot-host-adapter.js';
 import type { AgentHostAdapter, AgentHostType, HostCapabilities } from './types.js';
+import type {
+  LlmApiProviderVerifier,
+  LlmApiSelection,
+} from './llm-api.js';
+import {
+  resolveHostTypeForLlmApi,
+  verifyLlmApiProvider,
+} from './llm-api.js';
 
 export type HostAdapterFactoryOptions =
   | {
@@ -125,4 +133,47 @@ export function createHostAdapter(options: HostAdapterFactoryOptions): AgentHost
     case 'generic-mcp':
       return new GenericMcpHostAdapter(options.message, options.readinessCheck);
   }
+}
+
+
+export interface LlmApiHostAdapterOptions {
+  llmApi: LlmApiSelection;
+  copilot?: Omit<Extract<HostAdapterFactoryOptions, { host: 'copilot' }>, 'host'>;
+  codex?: Omit<Extract<HostAdapterFactoryOptions, { host: 'codex' }>, 'host'>;
+  claude?: Omit<Extract<HostAdapterFactoryOptions, { host: 'claude' }>, 'host'>;
+  genericMcp?: Omit<Extract<HostAdapterFactoryOptions, { host: 'generic-mcp' }>, 'host'>;
+}
+
+export interface VerifiedLlmApiHostAdapterOptions extends LlmApiHostAdapterOptions {
+  verifier: LlmApiProviderVerifier;
+}
+
+/**
+ * Convenience factory that lets callers choose a backing LLM API/provider
+ * while preserving existing host adapter behaviors.
+ */
+export function createHostAdapterForLlmApi(options: LlmApiHostAdapterOptions): AgentHostAdapter {
+  const host = resolveHostTypeForLlmApi(options.llmApi);
+
+  switch (host) {
+    case 'copilot':
+      return createHostAdapter({ host, ...options.copilot });
+    case 'codex':
+      return createHostAdapter({ host, ...options.codex });
+    case 'claude':
+      return createHostAdapter({ host, ...options.claude });
+    case 'generic-mcp':
+      return createHostAdapter({ host, ...options.genericMcp });
+  }
+}
+
+/**
+ * Verified variant of the LLM API factory that fails fast with clear errors
+ * when a selected provider is unavailable or not callable.
+ */
+export async function createVerifiedHostAdapterForLlmApi(
+  options: VerifiedLlmApiHostAdapterOptions,
+): Promise<AgentHostAdapter> {
+  await verifyLlmApiProvider(options.llmApi, { verifier: options.verifier });
+  return createHostAdapterForLlmApi(options);
 }
