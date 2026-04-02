@@ -23,7 +23,7 @@ describe('createHostAdapter generic-mcp readiness', () => {
   });
 });
 
-describe('createHostAdapter constructor parity for codex/claude', () => {
+describe('createHostAdapter constructor parity for codex/claude/claw', () => {
   const mockClient = () => ({
     async connect() {},
     async disconnect() {},
@@ -59,5 +59,15 @@ describe('createHostAdapter constructor parity for codex/claude', () => {
     });
     await adapter.connect();
     expect(adapter.host).toBe('claude');
+  });
+
+  it('creates claw adapter with clientFactory and family', async () => {
+    const adapter = createHostAdapter({
+      host: 'claw',
+      clientFactory: () => mockClient(),
+      family: 'zeroclaw',
+    });
+    await adapter.connect();
+    expect(adapter.host).toBe('claw');
   });
 });

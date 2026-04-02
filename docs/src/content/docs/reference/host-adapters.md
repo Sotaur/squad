@@ -26,11 +26,19 @@ import {
 } from '@bradygaster/squad-sdk';
 ```
 
+## ACP definition
+
+**ACP** stands for **Agent Control Protocol**. In this context, ACP refers to a
+newline-delimited **JSON-RPC 2.0** session protocol (typically over stdio) used
+for host runtime control methods such as `initialize`, `session/new`,
+`session/prompt`, and `session/stop`.
+
 ## Supported host types
 
 - `copilot`
 - `codex`
 - `claude`
+- `claw` (ZeroClaw/OpenClaw family, conservative defaults pending ACP probes)
 - `generic-mcp`
 
 ## Factory usage
@@ -63,9 +71,31 @@ const profile = resolveRuntimeProfileWithProbe(
 
 ## Capability resolution notes
 
+For `claw`, default capabilities are intentionally conservative until ACP handshake/probe evidence promotes specific flags.
+
 - `capabilityStates` supports `supported | unsupported | unknown`.
 - boolean `capabilities` are derived from capability states.
 - strict native hook validation can force fail-closed behavior.
+
+
+## Claw family adapter design
+
+`claw` is a host-family adapter intended for ZeroClaw/OpenClaw style runtimes.
+Use `family` as a diagnostic hint while keeping one stable Squad-facing contract:
+
+```ts
+const adapter = createHostAdapter({
+  host: 'claw',
+  family: 'zeroclaw',
+  clientFactory: () => myClawClient,
+});
+```
+
+Design principles:
+
+- **Family abstraction first**: one adapter contract for multiple claw runtimes.
+- **Runtime injection**: explicit `client`/`clientFactory` to decouple SDK from transport.
+- **Capability policy compatibility**: capability override support mirrors codex/claude adapters.
 
 ## Generic MCP readiness
 
