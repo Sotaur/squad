@@ -21,6 +21,7 @@ import {
   type CodexHostClientLike,
 } from './codex-host-adapter.js';
 import { CopilotHostAdapter, type CopilotHostClientLike } from './copilot-host-adapter.js';
+import { createClawHostAdapter, type ClawHostClientLike, type ClawFamily } from './claw-host-adapter.js';
 import type { AgentHostAdapter, AgentHostType, HostCapabilities } from './types.js';
 import type {
   LlmApiProviderVerifier,
@@ -49,6 +50,13 @@ export type HostAdapterFactoryOptions =
       client?: ClaudeHostClientLike;
       clientFactory?: () => ClaudeHostClientLike;
       capabilities?: Partial<HostCapabilities>;
+    }
+  | {
+      host: 'claw';
+      client?: ClawHostClientLike;
+      clientFactory?: () => ClawHostClientLike;
+      capabilities?: Partial<HostCapabilities>;
+      family?: ClawFamily;
     }
   | {
       host: 'generic-mcp';
@@ -129,6 +137,13 @@ export function createHostAdapter(options: HostAdapterFactoryOptions): AgentHost
         client: options.client,
         clientFactory: options.clientFactory,
         capabilities: options.capabilities,
+      });
+    case 'claw':
+      return createClawHostAdapter({
+        client: options.client,
+        clientFactory: options.clientFactory,
+        capabilities: options.capabilities,
+        family: options.family,
       });
     case 'generic-mcp':
       return new GenericMcpHostAdapter(options.message, options.readinessCheck);

@@ -15,7 +15,7 @@ import type {
 import type { SquadConnectionState } from '../adapter/client.js';
 
 /** Agent runtime host platform. */
-export type AgentHostType = 'copilot' | 'codex' | 'claude' | 'generic-mcp';
+export type AgentHostType = 'copilot' | 'codex' | 'claude' | 'claw' | 'generic-mcp';
 
 /** Capability flags used by runtime profile negotiation. */
 export interface HostCapabilities {
@@ -145,6 +145,16 @@ export function defaultCapabilitiesForHost(host: AgentHostType): HostCapabilitie
         sessionResume: true,
         modelHints: true,
         mcpTools: true,
+      });
+    case 'claw':
+      return defineHostCapabilities({
+        parallelSessions: false,
+        toolSchemas: false,
+        nativeHooks: false,
+        streamingEvents: false,
+        sessionResume: false,
+        modelHints: true,
+        mcpTools: false,
       });
     case 'generic-mcp':
       return defineHostCapabilities({

@@ -4,6 +4,7 @@ import { CopilotHostAdapter } from '../packages/squad-sdk/src/host/copilot-host-
 import { CodexHostAdapter } from '../packages/squad-sdk/src/host/codex-host-adapter.js';
 import { ClaudeHostAdapter } from '../packages/squad-sdk/src/host/claude-host-adapter.js';
 import { resolveRuntimeProfile } from '../packages/squad-sdk/src/runtime/capability-profile.js';
+import { ClawHostAdapter } from '../packages/squad-sdk/src/host/claw-host-adapter.js';
 
 function createMockClient() {
   return {
@@ -36,6 +37,10 @@ const adapters: Array<{ name: string; create: () => AgentHostAdapter }> = [
   {
     name: 'claude',
     create: () => new ClaudeHostAdapter({ client: createMockClient() }),
+  },
+  {
+    name: 'claw',
+    create: () => new ClawHostAdapter({ client: createMockClient(), family: 'zeroclaw' }),
   },
 ];
 
