@@ -34,6 +34,7 @@ The `hello-squad` sample demonstrates core casting and onboarding mechanics in ~
 | [streaming-chat](./streaming-chat) | Intermediate | Interactive chat: user messages routed to agents, responses stream in real time | `SquadClient`, session routing, real-time streaming |
 | [cost-aware-router](./cost-aware-router) | Intermediate–Advanced | Budget-aware routing: `CostTracker` monitors spend; router falls back to cheaper tiers | `CostTracker`, `EventBus`, cost monitoring, tier selection |
 | [skill-discovery](./skill-discovery) | Intermediate | Agents write, share, and promote `SKILL.md` files; team knowledge base grows | Skills system, confidence levels, knowledge sharing |
+| [mcp-squad-memory](./mcp-squad-memory) | Intermediate | Standalone MCP server for squad messaging + durable memory with SQLite backend | MCP stdio server, tool contracts, pluggable storage abstraction |
 | [autonomous-pipeline](./autonomous-pipeline) | Advanced | Full showcase: casting, governance, cost tracking, streaming, monitoring, live dashboard | All core APIs, terminal UI, comprehensive example |
 | [azure-function-squad](./azure-function-squad) | Intermediate | Serverless multi-agent review: HTTP endpoint → three specialist agents → JSON report | Azure Functions v4, SDK-First builder, JSON output |
 
@@ -83,4 +84,3 @@ See each sample's `README.md` for detailed setup, expected output, and customiza
 ## Questions?
 
 Open an issue or check the [Squad SDK documentation](../../README.md).
-
