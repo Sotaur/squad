@@ -1,0 +1,21 @@
+{
+  "name": "mcp-squad-memory",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Self-contained MCP server for squad communication and durable memory with pluggable storage.",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "better-sqlite3": "^11.8.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.2"
+  }
+}
